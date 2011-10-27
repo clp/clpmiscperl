@@ -1,0 +1,41 @@
+#!/usr/bin/env perl
+# sort_words1: Prompt user for a list of words; sort & print them.
+
+# Note:
+#
+# Status: Succeeds.
+#
+
+use strict;
+use warnings;
+use feature qw(say);
+
+# Ask questions & store answers in separate scalar vars.
+    print "Enter a list of words to be sorted: ";
+    my $list = <>;
+    chomp $list;
+
+# Sort & Print o/p.
+    #DBG say"\nWhat I got:";
+    #DBG print "$list ";
+    my (@sorted) = join ' ', sort (split / +/, $list);
+    print "\nSorted list:";
+    say @sorted;
+
+
+
+=begin spec
+
+Basic: Sort Words
+
+Write a program that asks the user to enter a list of words. Sort the list and
+print the sorted results. Do not use a loop to do this exercise. Sample output:
+
+  Please enter several words: perl is so much fun!
+  In sorted order: fun! is much perl so
+
+
+=end spec
+
+=cut
+

@@ -1,0 +1,59 @@
+#!/usr/bin/env perl
+# interview2: Prompt user w/ questions & collect the answers.
+
+# Note: This program uses a hash to store responses, instead of a separate
+# scalar var for each response.
+#
+# Status: Succeeds, but the spec wants separate scalars, not a hash.
+#
+
+use strict;
+use warnings;
+
+use feature qw(say);
+
+my %responses;
+
+my %questions = (
+    q1 => "Pick a number between 0 and 99",
+    q2 => "Pick a letter between a and m",
+    q3 => "What version of Perl runs here (try 'perl -v')",
+);
+
+foreach  my $k (sort keys %questions) {
+    say "$questions{$k}: ";
+    $responses{$k} = <STDIN>;
+    #DBG say "I got: ", $responses{$k};
+}
+
+# Print o/p.
+say "\nResponses:";
+foreach  my $k (sort keys %questions) {
+    print "$questions{$k}: ";
+    print $responses{$k};
+}
+
+=begin spec
+
+Basic: Interview
+
+Return to exercise list
+
+Write a program that asks the user three or more questions. Store the answer to
+each question in a separate scalar variable. Finally, print a message that
+includes the answers entered by the user. For example, your program might
+output something like this (what the user types is underlined):
+
+  What is your name? Bill
+  What is your favorite color? blue
+  What type of car do you drive? Honda
+  What a coincidence, Bill.  I drive a blue Honda!
+
+Note: you do not need to ask these particular questions; be creative and think of something original or humorous.
+
+Solution for Interview
+
+=end spec
+
+=cut
+

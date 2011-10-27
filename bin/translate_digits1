@@ -1,0 +1,58 @@
+#!/usr/bin/env perl
+# translate_digits: TBD.
+
+# Note: 
+#
+# Status: TBD.
+# 
+#
+
+use strict;
+use warnings;
+use feature qw(say);
+
+my %questions = (
+    q1 => "Enter a string containing one or more numbers",
+);
+
+# Ask questions & store answers in separate scalar vars.
+    print "$questions{q1}: ";
+    my $answer_q1 = <>;
+
+# Print o/p.
+    say"\nWhat I got:";
+    print "$questions{q1}: ";
+    print $answer_q1;
+
+
+
+=begin spec
+
+Arrays: Translate Digits
+
+Write a program to replace all the digits in a string with the corresponding
+English words. For example the number "1234" would be translated to "one two
+three four". Do this by creating an array of English words corresponding to the
+digits 0 ("zero") through 9 ("nine"). Use the qw operator to initialize this
+array.
+
+Convert the input string into an array of characters (Note: in Perl a character
+is just a string of length 1), then replace those array elements that are
+numeric digits with the corresponding words. Finally, display the contents
+separated by spaces.
+
+Any characters that are not numbers should be output without any change. To
+improve readability, insert a space between each word, and between any
+non-digit characters that were found in the input. For example consider the
+following output (what the user types is underlined):
+
+  Enter a string containing a number: 2 plus 2 is 4
+  The output is: two   p l u s   two   i s   four
+
+Observe the spaces between letters in a word. Also, note the three (3) spaces
+between words: that is because there was a space in the original input.
+
+=end spec
+
+=cut
+

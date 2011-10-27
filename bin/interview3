@@ -1,0 +1,58 @@
+#!/usr/bin/env perl
+# interview3: Prompt user w/ questions & collect the answers.
+
+# Note: This program does not use a loop, and stores each answer 
+# in an individual scalar var for each response.
+#
+# Status: Succeeds, and meets the spec, though it uses a brute force 
+# technique that is not easy to extend.
+#
+#TBD q.1. How to use loops, & write each response to a separate scalar?
+
+use strict;
+use warnings;
+use feature qw(say);
+
+my %questions = (
+    q1 => "Pick a number between 0 and 99",
+    q2 => "Pick a letter between a and m",
+    q3 => "What version of Perl runs here (try 'perl -v')",
+);
+
+# Ask questions & store answers in separate scalar vars.
+    print "$questions{q1}: ";
+    my $answer_q1 = <>;
+    print "$questions{q2}: ";
+    my $answer_q2 = <>;
+    print "$questions{q3}: ";
+    my $answer_q3 = <>;
+
+# Print o/p.
+    say"\nWhat I got:";
+    print "$questions{q1}: ";
+    print $answer_q1;
+    print "$questions{q2}: ";
+    print $answer_q2;
+    print "$questions{q3}: ";
+    print $answer_q3;
+
+
+
+=begin spec
+
+Basic: Interview
+
+Write a program that asks the user three or more questions. Store the answer to
+each question in a separate scalar variable. Finally, print a message that
+includes the answers entered by the user. For example, your program might
+output something like this (what the user types is underlined):
+
+  What is your name? Bill
+  What is your favorite color? blue
+  What type of car do you drive? Honda
+  What a coincidence, Bill.  I drive a blue Honda!
+
+=end spec
+
+=cut
+

@@ -1,0 +1,68 @@
+#!/usr/bin/env perl
+# interview1: Prompt user w/ questions & collect the answers.
+
+# Note: First attempt, using hash & loops.
+#
+# Status: Fails.  Abandoned for a different technique, see interview2.
+
+use strict;
+use warnings;
+
+use feature qw(say);
+
+my %responses;
+my $prefix = "response_";
+
+my %questions = (
+    q1 => "Pick a number between 0 and 99",
+    q2 => "Pick a letter between a and m",
+    q3 => "What version of Perl runs here (try 'perl -v')",
+);
+
+my $answer;
+
+# Ask questions & store answers in separate scalar vars.
+foreach  my $k (sort keys %questions) {
+    say "$questions{$k}: ";
+    #TBD.1 my $response = $k;
+    my $response = $k;
+    #TBD.1 say "I got: ", $response;
+    #F my $response_$k;
+    #F my $response_ . $k;
+    my $r = <STDIN>;
+    $answer = $prefix . $k;
+    #F $prefix . $k = $r;
+    #Fa $answer = $r;
+    $answer = $r;
+    say "I got: ", $answer;
+    #DBG say "\$k: ,$k,";
+    #TBD.1 say "I got: ", $response;
+}
+
+# Print o/p.
+foreach  my $k (sort keys %questions) {
+    print "$questions{$k}: ";
+    say $answer . $k;
+}
+
+=begin spec
+
+Basic: Interview
+
+Return to exercise list
+
+Write a program that asks the user three or more questions. Store the answer to each question in a separate scalar variable. Finally, print a message that includes the answers entered by the user. For example, your program might output something like this (what the user types is underlined):
+
+  What is your name? Bill
+  What is your favorite color? blue
+  What type of car do you drive? Honda
+  What a coincidence, Bill.  I drive a blue Honda!
+
+Note: you do not need to ask these particular questions; be creative and think of something original or humorous.
+
+Solution for Interview
+
+=end spec
+
+=cut
+
