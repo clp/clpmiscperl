@@ -5,11 +5,17 @@
 #
 # Status: TBD.
 # 
+# Fri2011_1028_11:50 : Start design.
+# Fri2011_1028_12:20 : Start entering code.
+# Fri2011_1028_12:28 : Start debugging.
+# 
 #
 
 use strict;
 use warnings;
 use feature qw(say);
+
+my @words = qw ( one two three four five six seven eight nine );
 
 my %questions = (
     q1 => "Enter a string containing one or more numbers",
@@ -19,10 +25,24 @@ my %questions = (
     print "$questions{q1}: ";
     my $answer_q1 = <>;
 
+# Convert i/p string to array of chars.
+    @chars = split //, $answer_q1;
+
+
+# Replace digits w/ corresponding words; and add a space after non-digits.
+    foreach (@chars) {
+        if ($_eq '0' .. '9') {
+            $_ = $words[$_] . ' ';
+        }
+        else {
+            $_ .= ' ';
+        }
+    }
+
 # Print o/p.
-    say"\nWhat I got:";
-    print "$questions{q1}: ";
-    print $answer_q1;
+    print "\nWhat I got:";
+    print "$answer_q1\n";
+    print "The output is: ", @chars, "\n";
 
 
 
