@@ -1,20 +1,8 @@
 #!/usr/bin/env perl
-# translate_digits: TBD.
-
-# Note: 
-#
-# Status: TBD.
-# 
-# Fri2011_1028_11:50 : Start design.
-# Fri2011_1028_12:20 : Start entering code.
-# Fri2011_1028_12:28 : Start debugging.
-# Fri2011_1028_12:41 : Passes basic tests.
-# 
-#
+# translate_digits: Replace digits in a string with English words.
 
 use strict;
 use warnings;
-use feature qw(say);
 
 my @words = qw ( zero one two three four five six seven eight nine );
 my @chars;
@@ -23,7 +11,7 @@ my %questions = (
     q1 => "Enter a string containing one or more numbers",
 );
 
-# Ask questions & store answers in separate scalar vars.
+# Ask question & store answer.
     print "$questions{q1}: ";
     my $answer_q1 = <>;
     chomp $answer_q1;
@@ -31,10 +19,8 @@ my %questions = (
 # Convert i/p string to array of chars.
     @chars = split //, $answer_q1;
 
-
 # Replace digits w/ corresponding words; and add a space after non-digits.
     foreach (@chars) {
-        #F if ($_ == 0 .. 9) {
         if ($_ =~ /\d/ ) {
             $_ = $words[$_] . ' ';
         }
