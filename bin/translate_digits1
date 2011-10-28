@@ -16,6 +16,7 @@ use warnings;
 use feature qw(say);
 
 my @words = qw ( one two three four five six seven eight nine );
+my @chars;
 
 my %questions = (
     q1 => "Enter a string containing one or more numbers",
@@ -31,7 +32,7 @@ my %questions = (
 
 # Replace digits w/ corresponding words; and add a space after non-digits.
     foreach (@chars) {
-        if ($_eq '0' .. '9') {
+        if ($_ eq '0' .. '9') {
             $_ = $words[$_] . ' ';
         }
         else {
