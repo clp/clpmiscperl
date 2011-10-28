@@ -40,21 +40,41 @@ my %prompts = (
     my $k = "s"; 
     my $v;
     my $answer;
-    my $rand  = 1;
-    my $count = 0;
-    while ( ($k,$v) = each %capitals ) {
-        next if ( $count++ < $rand );
-        print "$prompts{query} $k?  ";
-        $total_ans++;
-        chomp (my $answer = uc <>);
-        if ( $answer eq $capitals{$k} ) {
-            print "$prompts{right}";
-            $correct_ans++;
+    #F while ( <> !~ /$quit/i ) {
+    #F while ( <> && $_ !~ /$quit/i ) {
+    #F while ( $_ = <> && $_ !~ /$quit/i ) {
+    #F while ( $_ = <> && $_ !~ /quit/i ) {
+    #TBD print "$prompts{query} $k?  ";
+    print "DBG: Press Enter to start the quiz.";
+    #F while ( <> ) {
+    #F while ( 1 ) {
+      #DBG print "DBG: Got \$_: ,$_, .\n";
+      #DBG if ( chomp ($_) =~ /quit.*/i ) {
+      #DBG print "Got 'quit' request.\n";
+      #DBG last;
+      #DBG }
+        #TBD
+        my $rand  = 1;
+        my $count = 0;
+        while ( ($k,$v) = each %capitals ) {
+            next if ( $count++ < $rand );
+            print "$prompts{query} $k?  ";
+            chomp (my $answer = uc <>);
+            $total_ans++;
+            if ( $answer =~ /quit.*/i ) {
+                print "Got 'quit' request.\n";
+                last;
+            }
+            if ( $answer eq uc $v ) {
+                print "$prompts{right}";
+                $correct_ans++;
+            }
+            else {
+                print "$prompts{wrong}";
+            }
+            #TBD last;
         }
-        else {
-            print "$prompts{wrong}";
-        }
-    }
+#F }  # End while (1)
 
 # Print o/p.
     $correct_pct = int ( 100 * $correct_ans / $total_ans );
