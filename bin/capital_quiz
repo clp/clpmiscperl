@@ -1,0 +1,93 @@
+#!/usr/bin/env perl
+# capital_quiz: Print a country or state name & ask for its capital,
+# and check the response; show statistics when i/p is 'quit'.
+
+# Note: 
+#
+# Status: TBD.
+# 
+#
+
+use strict;
+use warnings;
+
+my %capitals = (
+    Alaska => 'Juneau',
+    Australia => 'Canberra',
+    Belize => 'Belmopan',
+    China => 'Beijing',
+    Delaware => 'Dover',
+    England => 'London',
+);
+
+my $correct_ans = 0;
+my $correct_pct = 0;
+my $size_of_capitals = scalar keys %capitals;
+my $quit = "QUIT";
+my $total_ans = 0;
+
+
+my %prompts = (
+    p1 => "What is the capital of ",
+    p2 => "That is correct!",
+    p3 => "Sorry, that is incorrect.",
+    p4a => "Thank you for playing!  You got 2 out of 3 right (66%).",
+    p4 => "Thank you for playing!  You got $correct_ans out of $total_ans right ($correct_pct%).",
+);
+
+# Ask questions & store answers in separate scalar vars.
+    my $k = "Alaska";
+    print "$prompts{p1} $k?  ";
+    my $answer = uc <>;
+
+# Print o/p.
+    print "\nWhat I got:\n";
+    print "$prompts{p1} ";
+    print "$answer\n";
+
+
+
+=begin spec
+
+Hashes: Capital Quiz
+
+Write a program to quiz yourself on the capital cities of various countries or
+states.
+
+Include in your program a hash containing the answers: the key to the hash
+should be the country, and the value should be the name of its capital city.
+Use all UPPER CASE letters for both country and city names.
+
+Your program should consist of an infinite loop (until the user asks to quit,
+anyway). Each time through the loop, pick one of the countries at random using
+Perl's random number generator and display that country for the user. Then ask
+the user to name its capital city.
+
+Next, read a line from the keyboard and compare it to the hash value that
+corresponds to the country that was asked (convert it to all upper case, so
+that it is case-insensitive). If it is the same, then inform the user and
+increment a variable to count the number of correct answers. If it is not the
+same, inform the user. In either case, increment a variable to count the total
+number of questions asked.
+
+If the user types "QUIT" instead of giving an answer (again, be
+case-insensitive), then display a summary of the user's scores and exit.
+Display the number correct, total number, and percentage correct (use int() to
+round it off).
+
+Sample output:
+
+  What is the capital of UNITED STATES OF AMERICA? washington
+  That is correct!
+  What is the capital of RUSSIA? moscow
+  That is correct!
+  What is the capital of INDIA? bombay
+  Sorry, that is incorrect.
+  What is the capital of CHINA? Quit
+  Thank you for playing!  You got 2 out of 3 right (66%).
+
+
+=end spec
+
+=cut
+
