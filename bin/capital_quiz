@@ -1,6 +1,6 @@
 #!/usr/bin/env perl
-# capital_quiz: Print a country or state name & ask for its capital,
-# and check the response; show statistics when i/p is 'quit'.
+# capital_quiz: Print a country or state name & ask for its capital.
+# Check the response and show final statistics when i/p is 'quit'.
 
 # Note: 
 #
@@ -31,30 +31,38 @@ my $total_ans = 0;
 
 my %prompts = (
     query => "What is the capital of ",
-    right => "That is correct!",
-    wrong => "Sorry, that is incorrect.",
+    right => "That is correct!\n",
+    wrong => "Sorry, that is incorrect.\n",
     totals => "Thank you for playing!  You got ",
 );
 
 # Ask questions & eval answer.
-    my $k = "s";
-    print "$prompts{query} $k?  ";
-    $total_ans++;
-    chomp (my $answer = uc <>);
-    if ( $answer eq $capitals{$k} ) {
-        print "$prompts{right}";
-        $correct_ans++;
-    }
-    else {
-        print "$prompts{wrong}";
+    my $k = "s"; 
+    my $v;
+    my $answer;
+    my $rand  = 1;
+    my $count = 0;
+    while ( ($k,$v) = each %capitals ) {
+        next if ( $count++ < $rand );
+        print "$prompts{query} $k?  ";
+        $total_ans++;
+        chomp (my $answer = uc <>);
+        if ( $answer eq $capitals{$k} ) {
+            print "$prompts{right}";
+            $correct_ans++;
+        }
+        else {
+            print "$prompts{wrong}";
+        }
     }
 
 # Print o/p.
-    $correct_pct = 100 * int ( $correct_ans / $total_ans );
-    print "\nWhat I got:\n";
-    print "$prompts{query} $k?  ";
-    print "$answer\n";
-    print "$prompts{totals} $correct_ans out of $total_ans right ($correct_pct%).\n";
+    $correct_pct = int ( 100 * $correct_ans / $total_ans );
+    #DBG print "\nWhat I got:\n";
+    #DBG print "DBG: $prompts{query} $k?  ";
+    #DBG print "DBG: $answer\n";
+    print "$prompts{totals} ";
+    print "$correct_ans out of $total_ans right ($correct_pct%).\n";
 
 
 
