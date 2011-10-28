@@ -8,6 +8,7 @@
 # Fri2011_1028_11:50 : Start design.
 # Fri2011_1028_12:20 : Start entering code.
 # Fri2011_1028_12:28 : Start debugging.
+# Fri2011_1028_12:41 : Passes basic tests.
 # 
 #
 
@@ -15,7 +16,7 @@ use strict;
 use warnings;
 use feature qw(say);
 
-my @words = qw ( one two three four five six seven eight nine );
+my @words = qw ( zero one two three four five six seven eight nine );
 my @chars;
 
 my %questions = (
@@ -25,6 +26,7 @@ my %questions = (
 # Ask questions & store answers in separate scalar vars.
     print "$questions{q1}: ";
     my $answer_q1 = <>;
+    chomp $answer_q1;
 
 # Convert i/p string to array of chars.
     @chars = split //, $answer_q1;
@@ -32,7 +34,8 @@ my %questions = (
 
 # Replace digits w/ corresponding words; and add a space after non-digits.
     foreach (@chars) {
-        if ($_ eq '0' .. '9') {
+        #F if ($_ == 0 .. 9) {
+        if ($_ =~ /\d/ ) {
             $_ = $words[$_] . ' ';
         }
         else {
