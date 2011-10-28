@@ -60,11 +60,11 @@ my %prompts = (
             next if ( $count++ < $rand );
             print "$prompts{query} $k?  ";
             chomp (my $answer = uc <>);
-            $total_ans++;
             if ( $answer =~ /quit.*/i ) {
                 print "Got 'quit' request.\n";
                 last;
             }
+            $total_ans++;
             if ( $answer eq uc $v ) {
                 print "$prompts{right}";
                 $correct_ans++;
