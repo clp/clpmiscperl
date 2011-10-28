@@ -12,6 +12,8 @@ use strict;
 use warnings;
 
 my %capitals = (
+    s => 'C',
+    s1 => 'c1',
     Alaska => 'Juneau',
     Australia => 'Canberra',
     Belize => 'Belmopan',
@@ -28,22 +30,31 @@ my $total_ans = 0;
 
 
 my %prompts = (
-    p1 => "What is the capital of ",
-    p2 => "That is correct!",
-    p3 => "Sorry, that is incorrect.",
-    p4a => "Thank you for playing!  You got 2 out of 3 right (66%).",
-    p4 => "Thank you for playing!  You got $correct_ans out of $total_ans right ($correct_pct%).",
+    query => "What is the capital of ",
+    right => "That is correct!",
+    wrong => "Sorry, that is incorrect.",
+    totals => "Thank you for playing!  You got ",
 );
 
-# Ask questions & store answers in separate scalar vars.
-    my $k = "Alaska";
-    print "$prompts{p1} $k?  ";
-    my $answer = uc <>;
+# Ask questions & eval answer.
+    my $k = "s";
+    print "$prompts{query} $k?  ";
+    $total_ans++;
+    chomp (my $answer = uc <>);
+    if ( $answer eq $capitals{$k} ) {
+        print "$prompts{right}";
+        $correct_ans++;
+    }
+    else {
+        print "$prompts{wrong}";
+    }
 
 # Print o/p.
+    $correct_pct = 100 * int ( $correct_ans / $total_ans );
     print "\nWhat I got:\n";
-    print "$prompts{p1} ";
+    print "$prompts{query} $k?  ";
     print "$answer\n";
+    print "$prompts{totals} $correct_ans out of $total_ans right ($correct_pct%).\n";
 
 
 
