@@ -29,7 +29,7 @@ my $quit = "QUIT";
 my $total_ans = 0;
 
 
-my %prompts = (
+my %messages = (
     query => "What is the capital of ",
     right => "  That is correct!\n",
     wrong => "  Sorry, that is incorrect.\n",
@@ -44,7 +44,7 @@ my %prompts = (
     #F while ( <> && $_ !~ /$quit/i ) {
     #F while ( $_ = <> && $_ !~ /$quit/i ) {
     #F while ( $_ = <> && $_ !~ /quit/i ) {
-    #TBD print "$prompts{query} $k?  ";
+    #TBD print "$messages{query} $k?  ";
     #TBR print "DBG: Press Enter to start the quiz.";
     #F while ( <> ) {
     #F while ( 1 ) {
@@ -59,7 +59,7 @@ my %prompts = (
         my $count = 0;
         while ( ($k,$v) = each %capitals ) {
             next if ( $count++ < $rand );
-            print "$prompts{query} $k?  ";
+            print "$messages{query} $k?  ";
             chomp (my $answer = uc <>);
             if ( $answer =~ /quit.*/i ) {
                 print "Got 'quit' request.\n";
@@ -67,12 +67,12 @@ my %prompts = (
             }
             $total_ans++;
             if ( $answer eq uc $v ) {
-                print "$prompts{right}";
+                print "$messages{right}";
                 $correct_ans++;
                 next;
             }
             else {
-                print "$prompts{wrong}";
+                print "$messages{wrong}";
                 next;
             }
             #TBD last;
@@ -82,9 +82,9 @@ my %prompts = (
 # Print o/p.
     $correct_pct = int ( 100 * $correct_ans / $total_ans );
     #DBG print "\nWhat I got:\n";
-    #DBG print "DBG: $prompts{query} $k?  ";
+    #DBG print "DBG: $messages{query} $k?  ";
     #DBG print "DBG: $answer\n";
-    print "$prompts{totals} ";
+    print "$messages{totals} ";
     print "$correct_ans out of $total_ans right ($correct_pct%).\n";
 
 
