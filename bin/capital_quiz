@@ -31,8 +31,8 @@ my $total_ans = 0;
 
 my %prompts = (
     query => "What is the capital of ",
-    right => "That is correct!\n",
-    wrong => "Sorry, that is incorrect.\n",
+    right => "  That is correct!\n",
+    wrong => "  Sorry, that is incorrect.\n",
     totals => "Thank you for playing!  You got ",
 );
 
@@ -45,7 +45,7 @@ my %prompts = (
     #F while ( $_ = <> && $_ !~ /$quit/i ) {
     #F while ( $_ = <> && $_ !~ /quit/i ) {
     #TBD print "$prompts{query} $k?  ";
-    print "DBG: Press Enter to start the quiz.";
+    #TBR print "DBG: Press Enter to start the quiz.";
     #F while ( <> ) {
     #F while ( 1 ) {
       #DBG print "DBG: Got \$_: ,$_, .\n";
@@ -54,7 +54,8 @@ my %prompts = (
       #DBG last;
       #DBG }
         #TBD
-        my $rand  = 1;
+        #DBG my $rand  = 1;
+        my $rand  = int (rand $size_of_capitals);
         my $count = 0;
         while ( ($k,$v) = each %capitals ) {
             next if ( $count++ < $rand );
@@ -68,9 +69,11 @@ my %prompts = (
             if ( $answer eq uc $v ) {
                 print "$prompts{right}";
                 $correct_ans++;
+                next;
             }
             else {
                 print "$prompts{wrong}";
+                next;
             }
             #TBD last;
         }
