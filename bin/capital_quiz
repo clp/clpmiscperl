@@ -2,11 +2,6 @@
 # capital_quiz: Print a country or state name & ask for its capital.
 # Check the response and show final statistics when i/p is 'quit'.
 
-# Note: 
-#
-# Status: TBD.
-# 
-#
 
 use strict;
 use warnings;
@@ -24,46 +19,27 @@ my %capitals = (
 
 my $correct_ans = 0;
 my $correct_pct = 0;
-my $size_of_capitals = scalar keys %capitals;
 my $quit = "QUIT";
+my $size_of_capitals = scalar keys %capitals;
 my $total_ans = 0;
 
 
 my %messages = (
-    query => "What is the capital of ",
+    query => "What is the capital of",
     right => "  That is correct!\n",
     wrong => "  Sorry, that is incorrect.\n",
     totals => "Thank you for playing!  You got ",
 );
 
 # Ask questions & eval answer.
-    my $k = "s"; 
-    my $v;
-    my $answer;
-    #F while ( <> !~ /$quit/i ) {
-    #F while ( <> && $_ !~ /$quit/i ) {
-    #F while ( $_ = <> && $_ !~ /$quit/i ) {
-    #F while ( $_ = <> && $_ !~ /quit/i ) {
-    #TBD print "$messages{query} $k?  ";
-    #TBR print "DBG: Press Enter to start the quiz.";
-    #F while ( <> ) {
     while ( 1 ) {
-      #DBG print "DBG: Got \$_: ,$_, .\n";
-      #DBG if ( chomp ($_) =~ /quit.*/i ) {
-      #DBG print "Got 'quit' request.\n";
-      #DBG last;
-      #DBG }
-        #TBD
-        #DBG my $rand  = 1;
         my $rand  = int (rand $size_of_capitals);
         my $count = 0;
-        while ( ($k,$v) = each %capitals ) {
+        while ( my ($k,$v) = each %capitals ) {
             next if ( $count++ < $rand );
             print "$messages{query} $k?  ";
             chomp (my $answer = uc <>);
-            if ( $answer =~ /quit.*/i ) {
-                #DBG print "Got 'quit' request.\n";
-                #OK. last;
+            if ( $answer =~ /$quit/ ) {
                 goto PRINT_RESULTS;
             }
             $total_ans++;
@@ -76,16 +52,12 @@ my %messages = (
                 print "$messages{wrong}";
                 last;
             }
-            #TBD last;
         }
     }  # End while (1)
 
 PRINT_RESULTS:
-# Print o/p.
+    # Avoid divide-by-zero error.
     $correct_pct = $total_ans ? int ( 100 * $correct_ans / $total_ans ) : 0;
-    #DBG print "\nWhat I got:\n";
-    #DBG print "DBG: $messages{query} $k?  ";
-    #DBG print "DBG: $answer\n";
     print "$messages{totals} ";
     print "$correct_ans out of $total_ans right ($correct_pct%).\n";
 
