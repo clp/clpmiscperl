@@ -47,7 +47,7 @@ my %messages = (
     #TBD print "$messages{query} $k?  ";
     #TBR print "DBG: Press Enter to start the quiz.";
     #F while ( <> ) {
-    #F while ( 1 ) {
+    while ( 1 ) {
       #DBG print "DBG: Got \$_: ,$_, .\n";
       #DBG if ( chomp ($_) =~ /quit.*/i ) {
       #DBG print "Got 'quit' request.\n";
@@ -62,25 +62,27 @@ my %messages = (
             print "$messages{query} $k?  ";
             chomp (my $answer = uc <>);
             if ( $answer =~ /quit.*/i ) {
-                print "Got 'quit' request.\n";
-                last;
+                #DBG print "Got 'quit' request.\n";
+                #OK. last;
+                goto PRINT_RESULTS;
             }
             $total_ans++;
             if ( $answer eq uc $v ) {
                 print "$messages{right}";
                 $correct_ans++;
-                next;
+                last;
             }
             else {
                 print "$messages{wrong}";
-                next;
+                last;
             }
             #TBD last;
         }
-#F }  # End while (1)
+    }  # End while (1)
 
+PRINT_RESULTS:
 # Print o/p.
-    $correct_pct = int ( 100 * $correct_ans / $total_ans );
+    $correct_pct = $total_ans ? int ( 100 * $correct_ans / $total_ans ) : 0;
     #DBG print "\nWhat I got:\n";
     #DBG print "DBG: $messages{query} $k?  ";
     #DBG print "DBG: $answer\n";
