@@ -1,0 +1,93 @@
+#!/usr/bin/env perl
+# filesys_report: Read arguments from the command line.  If they
+# are file names or directory names in the current directory, print
+# the name and a brief line of data about each one.
+
+# Notes:
+#
+# 1.  I modified the output format for items inside another directory,
+# to include the name of the parent directory.  This is useful when
+# more than one dirs are listed in the report.
+#
+# 2.  Using printf instead of 'int' to show the file modify time
+# data would show a more accurate time, because 'int' rounds down.
+#
+# 3.  The spec does not require the program to list the dir names
+# found in the specified dir, only the contents of those directories.
+# This does not seem right, but I followed the spec and do not list
+# such dir names.  This seems odd when using a wildcard char like
+# '?' or '*' on the cmd line - the o/p list shows contents of the dir
+# named bin, but does not list the dir named bin itself.
+#
+# Specifying '.' or '..' on the cmd line does list the dir names
+# that are in the specified dir, in the output.
+#
+
+
+use strict;
+use warnings;
+
+
+my $msg_neither = " is neither a file nor a directory.";
+#DBG my $msg_dbg1 = "DBG: \$_: ";
+
+# Read & handle one cmd line arg at a time.
+    while (<@ARGV>) {
+        #DBG print $msg_dbg1, [$_], "\n";
+        if (-f) {
+            my $mod_time = int -M _;
+            my $file_size = -s _;
+            print "[$_] contains $file_size bytes and was last ";
+            print "modified $mod_time days ago.\n";
+            next;
+        }
+        if (-d) {
+            opendir (my $dh, $_) or die "Cannot opendir [$_]: $!";
+            foreach my $i (readdir $dh) {
+                if (-f "$_/$i") {
+                    print "$i is a file in directory [$_] .\n" ;
+                    next;
+                }
+                if (-d "$_/$i") {
+                    print "$i is a directory in directory [$_] .\n" ;
+                    next;
+                }
+                print "In directory [$_], $i $msg_neither\n";
+                next;
+            }
+            next;
+        }
+        print [$_], $msg_neither, "\n";
+    }
+
+# Print o/p.
+
+
+
+=begin spec
+
+Filesystem: Report
+
+Write a program that displays information about the files and/or directories
+listed on the command line. For each word on the command line, check if it is a
+file or directory, and do the following:
+
+If it is a file, display the file size and how long ago it was most recently
+modified, like this:
+
+foo.txt contains 12345 bytes and was last modified 1.5 days ago.
+
+If it is a directory, then use opendir and readdir to read it, and display the
+names of each file or directory therein and whether it is a file or directory.
+(Do not recursively display this information about the contents of
+sub-directories...) Example:
+
+. is a directory
+.. is a directory
+foo.txt is a file
+fsreport.plx is a file
+
+=end spec
+
+=cut
+
