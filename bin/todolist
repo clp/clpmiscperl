@@ -1,0 +1,304 @@
+#!/usr/bin/env perl
+# todo_list: Write a to-do list manager, that can add, list, and
+# delete items; store the data in the file todolist.txt.
+
+# Note: 
+#
+# Status: TBD.
+# 
+#
+
+use strict;
+use warnings;
+use feature qw(say);
+
+my $date_mm_dd = '^(\d\d?)/(\d\d?)$';
+my $date_mm_dd_yy = '^(\d\d?)/(\d\d?)/(\d\d?)$';
+my $date_mm_dd_yyyy = '^(\d\d?)/(\d\d?)/(\d\d\d\d)$';
+my @other_args;
+my $todofile = "todolist.txt";
+
+my $msg_dbg1 = "DBG: \$_: ";
+
+sub add;
+sub list;
+sub del;
+
+# Get command and args
+my $cmd = uc shift;
+print "DBG: \$cmd: [$cmd]", "\n";
+
+if (@ARGV) {
+    @other_args = @ARGV;
+    print "DBG: \@other_args [@other_args]", "\n";
+}
+
+if ($cmd eq 'ADD') {
+    add( @other_args );
+}
+elsif ($cmd eq 'LIST') {
+    list( @other_args );
+}
+elsif ($cmd eq 'DELETE' ) {
+    del( @other_args );
+}
+else {
+    print "ERR: No valid command found; I got [$cmd]\n";
+    print "  Valid cmds are: add, list, or delete.\n";
+    print "  Enter pod2text $0 for help.\n";
+    die $!;
+}
+
+exit;
+
+sub add {
+    my $arg1 = shift;
+    my @args = @_;
+    print "DBG add(): \$arg1: ,$arg1,\n";
+    print "DBG add(): \@args: ,@args,\n";
+    return;
+}
+
+
+sub build_ymd {
+    #########################################################
+    # Usage      : TBD
+    # Purpose    : Build time stamp string.
+    # Returns    : A string like YYYY-MM-DD.
+    # Parameters : none; uses current time.
+    # Throws     : no exceptions
+    # Comments   : none
+    # Status     : Working.
+    # See Also   : n/a
+    #########################################################
+    #
+    my $date_req = shift;
+    my ( $sec, $min, $hour, $mday, $mon, $year, $wday, $yday, $isdst )
+        = localtime($date_req);
+    $year += 1900;
+    $mon  += 1;
+    my $tss = $year . "-" . $mon . "-" . $mday;
+    #ORG return $tss;
+    return ($year, $mon, $mday);
+}
+
+
+sub check_date {
+    my $date_requested = shift;
+    my @args = @_;
+    print "DBG check_date()10: \$date_requested: ,$date_requested,\n" if ($date_requested);
+    my ($month, $day);
+    my ( $sec, $min, $hour, $mday, $mon, $year, $wday, $yday, $isdst )
+        = localtime();
+    $year += 1900;
+    $mon  += 1;
+    #DBG print "DBG check_date()20: showing current date: y-m-d: ,$year\-$mon\-$mday,\n";
+    if ( not defined $date_requested ){
+        # When no date given, use today.
+        #DBG print "DBG check_date()30: []: $year\-$mon\-$mday\n";
+        #ORG return "$year\-$month\-$day";
+        return "[not defined]: $year\-$mon\-$mday";
+        #TBD
+    }
+    if ($date_requested =~ m/$date_mm_dd/) {
+        $month = $1;
+        $day   = $2;
+        #ORG return "$year\-$month\-$day";
+        return "mmdd: $year\-$month\-$day";
+    }
+    if ($date_requested =~ m/$date_mm_dd_yy/) {
+        $month = $1;
+        $day   = $2;
+        my $yr    = $3;
+        if ($yr < 50 ) {
+            $year = $yr + 2000;
+        }
+        else {
+            $year = $yr + 1900;
+        }
+        #ORG return "$year\-$month\-$day";
+        return "mmddyy: $year\-$month\-$day";
+    }
+    if ($date_requested =~ m/$date_mm_dd_yyyy/) {
+        $month = $1;
+        $day   = $2;
+        $year  = $3;
+        #ORG return "$year\-$month\-$day";
+        return "mmddyyyy: $year\-$month\-$day";
+    }
+    die "DIE check_date(): The date is not valid: [$date_requested].";
+}
+
+
+sub del {
+    my $arg1 = shift;
+    my @args = @_;
+    print "DBG del(): \$arg1: ,$arg1,\n";
+    print "DBG del(): \@args: ,@args,\n";
+    return;
+}
+
+
+sub list {
+    my $arg1 = shift;
+    my @args = @_;
+    #DBG print "DBG list(): \$arg1: ,$arg1,\n";
+    #DBG print "DBG list(): \@args: ,@args,\n";
+    my $checked_date;
+    # If $arg1 matches a date pattern
+      if (not defined $arg1 ) {
+          # Use today's date
+          $checked_date = check_date();
+          print "DBG list()30: $checked_date\n";
+      }
+      # else # ($arg1 =~ /$date_mm_dd/
+        # or $arg1 =~ /$date_mm_dd_yy/ 
+        # or $arg1 =~ /$date_mm_dd_yyyy/ 
+        # ) {
+      else {
+          $checked_date = check_date($arg1);
+          print "DBG list()40: $checked_date\n";
+      }
+    # Open data file
+    # Print header
+    # Init line counter
+    # Loop: read each line
+      # Increment line counter
+      # If ($arg1 matches all)
+        # Print "number. date task"
+      # If (due date exists and matches date of current line)
+        # Print "number. task"
+    # End of loop
+    # Close data file
+    return;
+}
+
+
+=pod
+
+# =begin spec
+
+Files: To Do List
+
+Return to exercise list
+
+Write a to-do list manager. The program should have the ability to print the
+to-do items for a particular day, add an item, or delete an item. The program
+must store its data in a file called "todolist.txt" in a particular format,
+defined below.
+
+You must not use any date-related Perl modules in solving this module. Use only
+regular expressions to parse dates and the built-in localtime() function to get
+the current date.
+
+When run, the program will first look at its command-line arguments (@ARGV) for
+instructions. The first word is the command to be executed, and the rest of the
+contents of @ARGV will be the arguments to that command. You must implement the
+following commands: add, list, and delete. Based on the command entered the
+program should do the relevant task and exit. Each command has its own syntax:
+
+add
+
+    Adds an item to the file. The first word after add may be a date in the
+    format MM/DD or MM/DD/YY or MM/DD/YYYY. If it matches none of those
+    patterns use today's date. If it matches the MM/DD pattern, use the current
+    year. If it matches MM/DD/YY, and YY is less than 50, use the current
+    century; if it is greater than 50 use the 1900's. If it matches MM/DD/YYYY
+    then the date is fully specified.
+
+    If there is a date given, everything else is to be joined together in a
+    string, and that will be the description of the to-do item. If there is no
+    date, the entire argument list is to be joined together as the description.
+
+    Open the file todolist.txt for appending and add a line to it consisting of
+    the date in the format YYYY-MM-DD followed by the description of the item.
+    Note that regardless of what format the date was entered in, the full
+    4-digit year must be used here.
+
+    Examples:
+
+      todolist.plx add Start on project
+      todolist.plx add 5/06/02 project is due
+      todolist.plx add 5/6/2002 pay credit card
+
+    This would create entries in the file (assuming it was run on April 30)
+    like this:
+
+      2002-04-30 Start on project
+      2002-05-06 project is due
+      2002-05-06 pay credit card
+
+    Your program should store the data in this format.
+
+list
+
+    Lists items from the file. The next argument after delete, if any, should
+    be one of "all", or a date in the format MM/DD or MM/DD/YY or MM/DD/YYYY
+    (see add for an explanation of how to parse dates).
+
+    If the argument is "all" then read the file todolist.txt and display all
+    entries, along with the date due (in YYYY-MM-DD form). Otherwise, display
+    the entries for the date specified (remember, no date means today's
+    entries) but do not display the date. At the start of each line of output
+    you must give a number (beginning with 1, not 0!) corresponding to which
+    line in the file is being displayed. This is to be used during the delete
+    command (see below).
+
+    Examples:
+    Command	Output
+
+      todolist.plx list 5/6
+
+    	
+
+      2. project is due
+      3. pay credit card
+
+      todolist.plx list
+
+    	
+
+      1. Start on project
+
+      todolist.plx list all
+
+    	
+
+      1. 2002-04-30 Start on project
+      2. 2002-05-06 project is due
+      3. 2002-05-06 pay credit card
+
+delete
+
+    Removes an item from the file. The next argument after list must be a
+    number indicating which line is to be deleted. Read from the file
+    todolist.txt and write to the file todonew.txt, printing all lines except
+    for the one specified by that number. Then rename the file todonew.txt to
+    todolist.txt (after closing your filehandles!).
+
+    Examples:
+    Command	Output
+
+      todolist.plx list 5/6
+
+    	
+
+      2. project is due
+      3. pay credit card
+
+      todolist.plx delete 2
+
+    	
+
+      Deleted 2: "project is due"
+
+      todolist.plx list 5/6
+
+    	
+
+      2. pay credit card
+
+# =end spec
+
+=cut
+
