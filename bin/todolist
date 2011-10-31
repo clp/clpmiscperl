@@ -248,20 +248,20 @@ list
 
       todolist.plx list 5/6
 
-        
+
 
       2. project is due
       3. pay credit card
 
       todolist.plx list
 
-        
+
 
       1. Start on project
 
       todolist.plx list all
 
-        
+
 
       1. 2002-04-30 Start on project
       2. 2002-05-06 project is due
@@ -280,20 +280,20 @@ delete
 
       todolist.plx list 5/6
 
-        
+
 
       2. project is due
       3. pay credit card
 
       todolist.plx delete 2
 
-        
+
 
       Deleted 2: "project is due"
 
       todolist.plx list 5/6
 
-        
+
 
       2. pay credit card
 
