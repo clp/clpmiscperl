@@ -4,7 +4,11 @@
 
 # Note: 
 #
-# Status: TBD.
+# Status: In progress.
+#   main
+#   add
+#   list
+#   del: TBD
 # 
 #
 
@@ -60,11 +64,12 @@ sub add {
     print "DBG add(): \@args: ,@args,\n";
 
     my ($checked_date, @task);
+
+    # If there is no argument, die w/ an error.
     # If $arg1 is not a date pattern, use it as the task,
     # and use today's date for the due date;
     # else get the date from $arg1 and convert it to desired format,
     # and use @args as the task.
-    # If there is no argument, die w/ an error.
     if ( not defined $arg1 ) {
         die "DIE No task found to add to the list";
     }
@@ -90,13 +95,14 @@ sub add {
 # if date was invalid.
 sub check_date {
     my $date_requested = shift;
-    my @args = @_;
+    my @args = @_; #TBR?
     print "DBG check_date()10: \$date_requested: ,$date_requested,\n" if ($date_requested);
     my ($month, $day);
-    my ( $sec, $min, $hour, $mday, $mon, $year, $wday, $yday, $isdst )
-        = localtime();
-    $year += 1900;
-    $mon  += 1;
+    #TBR my ( $sec, $min, $hour, $mday, $mon, $year, $wday, $yday, $isdst )
+        #TBR = localtime();
+    #TBR $year += 1900;
+    my @time_fields  = localtime();
+    $year = $time_fields[5] + 1900;
     #DBG print "DBG check_date()20: showing current date: y-m-d: ,$year\-$mon\-$mday,\n";
     if ( not defined $date_requested ){
         # When no date given, use today.
