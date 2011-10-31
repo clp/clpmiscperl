@@ -43,7 +43,7 @@ elsif ($cmd eq 'DELETE' ) {
     del( @other_args );
 }
 else {
-    print "ERR: No valid command found; I got [$cmd]\n";
+    print "ERR: No valid command found; got [$cmd]\n";
     print "  Valid cmds are: add, list, or delete.\n";
     print "  Enter pod2text $0 for help.\n";
     die $!;
@@ -51,38 +51,43 @@ else {
 
 exit;
 
+# Append the task entered at cmd line to the todo data file.
+# Include the due date, if entered; otherwise, use today's date.
 sub add {
     my $arg1 = shift;
     my @args = @_;
     print "DBG add(): \$arg1: ,$arg1,\n";
     print "DBG add(): \@args: ,@args,\n";
+
+    my ($checked_date, @task);
+    # If $arg1 is not a date pattern, use it as the task,
+    # and use today's date for the due date;
+    # else get the date from $arg1 and convert it to desired format,
+    # and use @args as the task.
+    # If there is no argument, die w/ an error.
+    if ( not defined $arg1 ) {
+        die "DIE No task found to add to the list";
+    }
+    if ( $arg1 !~ m{\d\d?/} ) {
+        # Use today's date.
+        $checked_date = check_date();
+        push @task, $arg1 , @args;
+    }
+    else {
+        $checked_date = check_date($arg1);
+        #DBG print "DBG add()40: $checked_date\n";
+        @task = @args;
+    }
+    #TBD Open file for appending, then write the line of data to it.
+    open my $fh, '>>', $todofile;
+    print {$fh} "$checked_date  @task\n";
+    close $fh;
     return;
 }
 
-
-sub build_ymd {
-    #########################################################
-    # Usage      : TBD
-    # Purpose    : Build time stamp string.
-    # Returns    : A string like YYYY-MM-DD.
-    # Parameters : none; uses current time.
-    # Throws     : no exceptions
-    # Comments   : none
-    # Status     : Working.
-    # See Also   : n/a
-    #########################################################
-    #
-    my $date_req = shift;
-    my ( $sec, $min, $hour, $mday, $mon, $year, $wday, $yday, $isdst )
-        = localtime($date_req);
-    $year += 1900;
-    $mon  += 1;
-    my $tss = $year . "-" . $mon . "-" . $mday;
-    #ORG return $tss;
-    return ($year, $mon, $mday);
-}
-
-
+# Verify that the date entered at the cmd line is valid.  If no date
+# was entered, use today's date.  Return the date as YYYY-MM-DD, or die
+# if date was invalid.
 sub check_date {
     my $date_requested = shift;
     my @args = @_;
@@ -95,10 +100,8 @@ sub check_date {
     #DBG print "DBG check_date()20: showing current date: y-m-d: ,$year\-$mon\-$mday,\n";
     if ( not defined $date_requested ){
         # When no date given, use today.
-        #DBG print "DBG check_date()30: []: $year\-$mon\-$mday\n";
         #ORG return "$year\-$month\-$day";
         return "[not defined]: $year\-$mon\-$mday";
-        #TBD
     }
     if ($date_requested =~ m/$date_mm_dd/) {
         $month = $1;
@@ -151,10 +154,6 @@ sub list {
           $checked_date = check_date();
           print "DBG list()30: $checked_date\n";
       }
-      # else # ($arg1 =~ /$date_mm_dd/
-        # or $arg1 =~ /$date_mm_dd_yy/ 
-        # or $arg1 =~ /$date_mm_dd_yyyy/ 
-        # ) {
       else {
           $checked_date = check_date($arg1);
           print "DBG list()40: $checked_date\n";
@@ -245,24 +244,24 @@ list
     command (see below).
 
     Examples:
-    Command	Output
+    Command    Output
 
       todolist.plx list 5/6
 
-    	
+        
 
       2. project is due
       3. pay credit card
 
       todolist.plx list
 
-    	
+        
 
       1. Start on project
 
       todolist.plx list all
 
-    	
+        
 
       1. 2002-04-30 Start on project
       2. 2002-05-06 project is due
@@ -277,24 +276,24 @@ delete
     todolist.txt (after closing your filehandles!).
 
     Examples:
-    Command	Output
+    Command    Output
 
       todolist.plx list 5/6
 
-    	
+        
 
       2. project is due
       3. pay credit card
 
       todolist.plx delete 2
 
-    	
+        
 
       Deleted 2: "project is due"
 
       todolist.plx list 5/6
 
-    	
+        
 
       2. pay credit card
 
