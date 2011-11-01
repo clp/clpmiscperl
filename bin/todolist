@@ -2,7 +2,11 @@
 # todo_list: Write a to-do list manager, that can add, list, and
 # delete items; store the data in the file todolist.txt.
 
-# Note: 
+# Notes: 
+# 1.  Must quote input data containing chars that the shell might
+# interpret, eg, use
+#   perl bin/todolist add '!abc'
+#
 #
 # Status: TBD.
 # 
@@ -97,17 +101,27 @@ sub check_date {
         = localtime();
     $year += 1900;
     $mon  += 1;
+    #TBD Add leading zeroes to mm & dd if needed, before writing to o/p file.
+    for my $i ($mday,$mon,$year) {
+        $i = "0" . $i if $i <= 9;
+      }
+    #
     #DBG print "DBG check_date()20: showing current date: y-m-d: ,$year\-$mon\-$mday,\n";
     if ( not defined $date_requested ){
         # When no date given, use today.
-        #ORG return "$year\-$month\-$day";
-        return "[not defined]: $year\-$mon\-$mday";
+        $month = $mon;
+        $day   = $mday;
+        return "$year\-$month\-$day";
+        #ORG return "[not defined]: $year\-$mon\-$mday";
     }
     if ($date_requested =~ m/$date_mm_dd/) {
         $month = $1;
         $day   = $2;
-        #ORG return "$year\-$month\-$day";
-        return "mmdd: $year\-$month\-$day";
+        for my $i ($day,$month,$year) {
+            $i = "0" . $i if $i <= 9;
+        }
+        return "$year\-$month\-$day";
+        #ORG return "mmdd: $year\-$month\-$day";
     }
     if ($date_requested =~ m/$date_mm_dd_yy/) {
         $month = $1;
@@ -119,15 +133,21 @@ sub check_date {
         else {
             $year = $yr + 1900;
         }
-        #ORG return "$year\-$month\-$day";
-        return "mmddyy: $year\-$month\-$day";
+        for my $i ($day,$month,$year) {
+            $i = "0" . $i if $i <= 9;
+        }
+        return "$year\-$month\-$day";
+        #ORG return "mmddyy: $year\-$month\-$day";
     }
     if ($date_requested =~ m/$date_mm_dd_yyyy/) {
         $month = $1;
         $day   = $2;
         $year  = $3;
-        #ORG return "$year\-$month\-$day";
-        return "mmddyyyy: $year\-$month\-$day";
+        for my $i ($day,$month,$year) {
+            $i = "0" . $i if $i <= 9;
+        }
+        return "$year\-$month\-$day";
+        #ORG return "mmddyyyy: $year\-$month\-$day";
     }
     die "DIE check_date(): The date is not valid: [$date_requested].";
 }
@@ -148,27 +168,59 @@ sub list {
     #DBG print "DBG list(): \$arg1: ,$arg1,\n";
     #DBG print "DBG list(): \@args: ,@args,\n";
     my $checked_date;
+    my ($date_of_task, $task);
+    my $task_counter = 0;
     # If $arg1 matches a date pattern
       if (not defined $arg1 ) {
           # Use today's date
           $checked_date = check_date();
-          print "DBG list()30: $checked_date\n";
+          #DBG print "DBG list()30: $checked_date\n";
       }
-      else {
+      elsif ($arg1 eq 'all') {
+          #DBG print "DBG list()35: got request to 'list all'\n";
+      }
+      elsif ($arg1 =~ m{\d\d?/} ) {
           $checked_date = check_date($arg1);
-          print "DBG list()40: $checked_date\n";
+          #DBG print "DBG list()40: $checked_date\n";
       }
-    # Open data file
+      else { 
+          die "DIE Got invalid argument to list(): ,$arg1,";
+      }
     # Print header
-    # Init line counter
+    print "todolist.plx list $arg1\n" if (defined $arg1);
+    # Open data file
+    open my $fhread, '<', $todofile or die "Cannot read from $todofile: ,$!,";
     # Loop: read each line
-      # Increment line counter
-      # If ($arg1 matches all)
-        # Print "number. date task"
-      # If (due date exists and matches date of current line)
-        # Print "number. task"
-    # End of loop
-    # Close data file
+    while ( my $line = <$fhread> ) {
+        chomp $line;
+        if ( $line  =~ m{(^\d{4}-\d\d-\d\d)\s+(.*)$} ) {
+            $date_of_task = $1;
+            $task = $2;
+        }
+        else {
+            die "DIE The line is not valid: [$line]";
+        }
+        $task_counter++;
+        #DBG print "DBG list():\$task_counter: ,$task_counter,\n";
+        if (not defined $arg1) {
+            # Print only today's tasks
+            if ( $date_of_task eq check_date() ) {
+                print "$task_counter. $date_of_task  $task\n";
+            }
+            next; # Read next line
+        }
+        if ($arg1 eq 'all') {
+            print "$task_counter. $date_of_task  $task\n";
+            next;
+        }
+        if ($arg1 =~ m{\d\d?/} ) {
+            print "$task_counter. $task\n";
+            next;
+        }
+        # If (due date exists and matches date of current line)
+            # Print "number. task"
+    } # End of loop
+    close $fhread;
     return;
 }
 
