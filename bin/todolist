@@ -99,12 +99,9 @@ sub add {
 # if date was invalid.
 sub check_date {
     my $date_requested = shift;
-    my @args = @_; #TBR?
+    #TBR my @args = @_; #TBR?
     #DBG print "DBG check_date()10: \$date_requested: ,$date_requested,\n" if ($date_requested);
     my ($month, $day);
-    #TBR my ( $sec, $min, $hour, $mday, $mon, $year, $wday, $yday, $isdst )
-        #TBR = localtime();
-    #TBR $year += 1900;
     my @time_fields  = localtime();
     my $year = $time_fields[5] + 1900;
     $month = $time_fields[4] + 1;
@@ -116,7 +113,6 @@ sub check_date {
     if ( not defined $date_requested ){
         # When no date given, use today.
         return "$year\-$month\-$day";
-        #ORG return "[not defined]: $year\-$mon\-$mday";
     }
     if ($date_requested =~ m/$date_mm_dd/) {
         $month = $1;
@@ -125,7 +121,6 @@ sub check_date {
             $i = "0" . $i if $i <= 9;
         }
         return "$year\-$month\-$day";
-        #ORG return "mmdd: $year\-$month\-$day";
     }
     if ($date_requested =~ m/$date_mm_dd_yy/) {
         $month = $1;
@@ -141,7 +136,6 @@ sub check_date {
             $i = "0" . $i if $i <= 9;
         }
         return "$year\-$month\-$day";
-        #ORG return "mmddyy: $year\-$month\-$day";
     }
     if ($date_requested =~ m/$date_mm_dd_yyyy/) {
         $month = $1;
@@ -151,7 +145,6 @@ sub check_date {
             $i = "0" . $i if $i <= 9;
         }
         return "$year\-$month\-$day";
-        #ORG return "mmddyyyy: $year\-$month\-$day";
     }
     die "DIE check_date(): The date is not valid: [$date_requested].";
 }
