@@ -151,10 +151,33 @@ sub check_date {
 
 
 sub del {
-    my $arg1 = shift;
-    my @args = @_;
-    print "DBG del(): \$arg1: ,$arg1,\n";
-    print "DBG del(): \@args: ,@args,\n";
+    my $line_to_delete = shift;
+    #DBG print "DBG del(): \$line_to_delete: ,$line_to_delete,\n";
+    die "DIE Input line to delete() must be an integer; got [$line_to_delete]."
+        if ( $line_to_delete !~ /\d+/ );
+    my $newfile = "todonew.txt";
+    open my $fsrc, '<', $todofile or die "Cannot open input file: [$!]";
+    my $num_src_lines;
+    $num_src_lines++ while <$fsrc>;
+    close $fsrc;
+    die "DIE Input file has no data: [$!]" if ( !defined $num_src_lines );
+    #DBG print "DBG del(): \$num_src_lines ,$num_src_lines,\n";
+    my $msg1 = "DIE Input for delete() must be between 1 and $num_src_lines";
+    my $msg2 = " for current data file; got [$line_to_delete]";
+    die "$msg1 $msg2"
+        if ( $line_to_delete < 1 or $line_to_delete > $num_src_lines);
+    open my $fnew, '>', $newfile or die "Cannot open new file: [$!]";
+    my $line_counter = 0;
+    open $fsrc, '<', $todofile or die "Cannot open new file: [$!]";
+    while (<$fsrc>) {
+        chomp;
+        $line_counter++;
+        print "$line_counter  $msg_dbg1 ,$_,\n";
+        print {$fnew} $_, "\n" if ($line_counter != $line_to_delete);
+    }
+    close $fsrc;
+    close $fnew;
+    rename "todonew.txt", "todolist.txt" or die "Cannot rename new to old: [$!]";
     return;
 }
 
@@ -185,8 +208,8 @@ sub list {
       }
     # Print header
     print "todolist.plx list $arg1\n" if (defined $arg1);
-    # Open data file
     open my $fhread, '<', $todofile or die "Cannot read from $todofile: ,$!,";
+
     # Loop: read each line
     while ( my $line = <$fhread> ) {
         chomp $line;
@@ -218,7 +241,7 @@ sub list {
         }
         # If (due date exists and matches date of current line)
             # Print "number. task"
-    } # End of loop
+    }
     close $fhread;
     return;
 }
