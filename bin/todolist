@@ -3,8 +3,8 @@
 # delete items; store the data in the file todolist.txt.
 
 # Notes: 
-# 1.  Must quote input data containing chars that the shell might
-# interpret, eg, use
+# 1.  Must quote input data that contains chars that the shell might
+# interpret, eg, insert the quotes:
 #   perl bin/todolist add '!abc'
 #
 #
