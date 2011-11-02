@@ -1,10 +1,10 @@
 #!/usr/bin/env perl
-# todo_list: Write a to-do list manager, that can add, list, and
+# todo_list: Write a to-do list manager that can add, list, and
 # delete items; store the data in the file todolist.txt.
 
 # Notes: 
-# 1.  Must quote input data that contains chars that the shell might
-# interpret, eg, insert the quotes:
+# 1.  Must quote input data entered on the cmd line that contains 
+# chars that the shell might interpret; eg, insert the quotes:
 #   perl bin/todolist add '!abc'
 #
 #
