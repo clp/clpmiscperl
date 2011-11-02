@@ -26,7 +26,7 @@ sub add;
 sub list;
 sub del;
 
-# Get command and args
+# Get command and args from the command line.
 my $cmd = uc shift;
 
 if (@ARGV) {
@@ -67,7 +67,7 @@ sub add {
     if ( not defined $arg1 ) {
         die "DIE No task found to add to the list";
     }
-    if ( $arg1 !~ m{\d\d?/} ) {
+    if ( $arg1 !~ m{^\d\d?/} ) {
         # Use today's date.
         $checked_date = check_date();
         push @task, $arg1 , @args;
@@ -76,7 +76,7 @@ sub add {
         $checked_date = check_date($arg1);
         @task = @args;
     }
-    open my $fh, '>>', $todofile;
+    open my $fh, '>>', $todofile or die "Cannot open output file: [$!]";
     print {$fh} "$checked_date  @task\n";
     close $fh;
     return;
@@ -138,6 +138,8 @@ sub check_date {
 
 sub del {
     my $line_to_delete = shift;
+    die "DIE Got no input for delete(); must be an integer line number."
+        if ( ! defined $line_to_delete );
     die "DIE Input line to delete() must be an integer; got [$line_to_delete]."
         if ( $line_to_delete !~ /\d+/ );
     my $newfile = "todonew.txt";
