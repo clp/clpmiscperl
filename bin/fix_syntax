@@ -12,13 +12,15 @@
 # print the results.
 #
 use warnings;
-use strict
+use strict;
 
 my $file = shift @ARGV;
-open FILE, $file or die 'Can't read $file: $!\n';
-while <FLIE>
+open FILE, $file or die "Can't read $file: $!\n";
+while (<FILE>)
 {
-    s/#.*//; s/^\s+|\s+$/g; next if /^$/;
+    s/#.*//;
+    s/^\s+|\s+$//g;
+    next if /^$/;
     print "$_\n";
 }
 
