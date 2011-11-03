@@ -145,15 +145,24 @@ sub del {
     my $newfile = "todonew.txt";
     open my $fnew, '>', $newfile or die "Cannot open new file: [$!]";
 
+    my $deleted_line;
     my $line_counter = 0;
     open $fsrc, '<', $todofile or die "Cannot open input file: [$!]";
     while (<$fsrc>) {
         $line_counter++;
-        print {$fnew} $_  if ($line_counter != $line_to_delete);
+        if ($line_counter != $line_to_delete) {
+            print {$fnew} $_;
+        }
+        else {
+            $deleted_line = $_;
+        }
     }
     close $fsrc;
     close $fnew;
     rename "todonew.txt", "todolist.txt" or die "Cannot rename new to old: [$!]";
+    chomp $deleted_line;
+    $deleted_line =~ s/^.*?\s+//;  # Remove date
+    print "\nDeleted $line_to_delete: \"$deleted_line\"\n";;
     return;
 }
 
