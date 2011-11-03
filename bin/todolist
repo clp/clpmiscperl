@@ -83,32 +83,24 @@ sub add {
 }
 
 # Verify that the date entered at the cmd line is valid.  If no date
-# was entered, use today's date.  Return the date as YYYY-MM-DD, or die
-# if date was invalid.
+# was entered, use today's date.  Return the date as YYYY-MM-DD,
+# or die if date was invalid.
 sub check_date {
     my $date_requested = shift;
-    my ($month, $day);
-    my @time_fields  = localtime();
-    my $year = $time_fields[5] + 1900;
+    my ($year, $month, $day, $date_ymd);
+    my @time_fields  = localtime();  # Get values for today
+    $year = $time_fields[5] + 1900;
     $month = $time_fields[4] + 1;
     $day = $time_fields[3];
-    for my $i ($day,$month) {
-        $i = "0" . $i if $i <= 9;
-    }
 
-    # When no date given, use today.
     if ( not defined $date_requested ){
-        return "$year\-$month\-$day";
+        # When no date given, use today.
     }
-    if ($date_requested =~ m/$date_mm_dd/) {
+    elsif ($date_requested =~ m/$date_mm_dd/) {
         $month = $1;
         $day   = $2;
-        for my $i ($day,$month,$year) {
-            $i = "0" . $i if $i <= 9;
-        }
-        return "$year\-$month\-$day";
     }
-    if ($date_requested =~ m/$date_mm_dd_yy/) {
+    elsif ($date_requested =~ m/$date_mm_dd_yy/) {
         $month = $1;
         $day   = $2;
         my $yr    = $3;
@@ -118,21 +110,17 @@ sub check_date {
         else {
             $year = $yr + 1900;
         }
-        for my $i ($day,$month,$year) {
-            $i = "0" . $i if $i <= 9;
-        }
-        return "$year\-$month\-$day";
     }
-    if ($date_requested =~ m/$date_mm_dd_yyyy/) {
+    elsif ($date_requested =~ m/$date_mm_dd_yyyy/) {
         $month = $1;
         $day   = $2;
         $year  = $3;
-        for my $i ($day,$month,$year) {
-            $i = "0" . $i if $i <= 9;
-        }
-        return "$year\-$month\-$day";
     }
-    die "DIE check_date(): The date is not valid: [$date_requested].";
+    else {
+        die "DIE check_date(): The date is not valid: [$date_requested].";
+    }
+    $date_ymd = sprintf( "%04d-%02d-%02d", $year, $month, $day);
+    return $date_ymd;
 }
 
 
