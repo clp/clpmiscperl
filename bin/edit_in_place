@@ -1,0 +1,24 @@
+# The following command, when run on the bash command line,
+# meets the spec.  The data file can be a copy of the 
+# bin/cmd_line_to_program file.
+# 
+
+# perl -pi.old -e "s/java/perl/gi" data/java_to_perl_2
+# 
+
+
+=begin spec
+
+Command Line: Edit In Place
+
+Write a command-line program that modifies the contents of the file(s) given on
+the command line, replacing the word "Java" with "Perl" wherever it occurs,
+case-insentively. In other words, delete any It should create a file called
+foo.txt.old for any file foo.txt given, containing the original contents; the
+file foo.txt should contain the modified version. (Yes, you can do this only
+with Perl command-line options!)
+
+=end spec
+
+=cut
+
