@@ -1,0 +1,28 @@
+#!/usr/bin/perl
+
+use warnings;
+use strict;
+
+while (<>)
+{
+    s/java/perl/gi;
+    print;
+}
+
+
+=begin spec
+
+Command Line: To Program
+
+Return to exercise list
+
+Write a Perl program that is equivalent to this command-line program:
+
+perl -pe "s/java/perl/gi"
+
+Turn in the program as your answer.
+
+=end spec
+
+=cut
+
