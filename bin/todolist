@@ -1,15 +1,12 @@
 #!/usr/bin/env perl
-# todo_list: Write a to-do list manager that can add, list, and
+
+# todolist: Write a to-do list manager that can add, list, and
 # delete items; store the data in the file todolist.txt.
 
 # Notes: 
-# 1.  Must quote input data entered on the cmd line that contains 
-# chars that the shell might interpret; eg, insert the quotes:
+# 1.  Must quote input data entered on the cmd line that contains
+# chars that the shell would interpret; eg, insert the quotes:
 #   perl bin/todolist add '!abc'
-#
-#
-# Status: 
-# Tue2011_1101_20:26 : Functions working; review and refactor.
 #
 
 use strict;
@@ -169,29 +166,28 @@ sub del {
 
 sub list {
     my $arg1 = shift;
-    my @args = @_;
     my ($date_of_task, $task, $checked_date);
     my $task_counter = 0;
+    my $today = check_date();
+
+    # Get date of items to print.
     if (not defined $arg1 ) {
         # If no arg, use today's date
-        $checked_date = check_date();
+        $checked_date = $today;
     }
     elsif ($arg1 eq 'all') {
-        #DBG print "DBG list()35: got request to 'list all'\n";
+        # Keep this empty block so 'all' is a valid argument.
     }
-    elsif ($arg1 =~ m{\d\d?/} ) {
+    elsif ($arg1 =~ m{^\d\d?/} ) {
         $checked_date = check_date($arg1);
     }
     else { 
-        die "DIE Got invalid argument to list(): [$arg1]";
+        die "DIE Got invalid argument to list() cmd: [$arg1]";
     }
-    # Print header
-    print "todolist.plx list ";
-    print "$arg1" if (defined $arg1);
-    print "\n";
-    open my $fhread, '<', $todofile or die "Cannot read from $todofile: ,$!,";
 
-    # Loop: read each line
+    open my $fhread, '<', $todofile or die "Cannot read from $todofile: [$!]";
+
+    # Loop: read each line, get matching items to print, & write them to o/p.
     while ( my $line = <$fhread> ) {
         chomp $line;
         if ( $line  =~ m{(^\d{4}-\d\d-\d\d)\s+(.*)$} ) {
@@ -199,13 +195,11 @@ sub list {
             $task = $2;
         }
         else {
-            die "DIE The i/p line read from the file is not valid: [$line]";
+            die "DIE Got invalid line from the input file: [$line]";
         }
         $task_counter++;
-        if (not defined $arg1) {
-            # Print only today's tasks
-            if ( $date_of_task eq check_date() ) {
-                #TBR print "$task_counter. $date_of_task  $task\n";
+        if (not defined $arg1 ) {
+            if ( $date_of_task eq $today ) {
                 print "$task_counter. $task\n";
             }
             next;
@@ -220,8 +214,6 @@ sub list {
             }
             next;
         }
-        # If (due date exists and matches date of current line)
-            # Print "number. task"
     }
     close $fhread;
     return;
