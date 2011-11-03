@@ -128,28 +128,28 @@ sub del {
     my $line_to_delete = shift;
     die "DIE Got no input for delete(); must be an integer line number."
         if ( ! defined $line_to_delete );
-    die "DIE Input line to delete() must be an integer; got [$line_to_delete]."
+    die "DIE Got invalid arg for delete(), must be an integer: [$line_to_delete]."
         if ( $line_to_delete !~ /\d+/ );
-    my $newfile = "todonew.txt";
+
     open my $fsrc, '<', $todofile or die "Cannot open input file: [$!]";
     my $num_src_lines;
     $num_src_lines++ while <$fsrc>;
     close $fsrc;
     die "DIE Input file has no data: [$!]" if ( !defined $num_src_lines );
 
-    my $msg1 = "DIE Input for delete() must be between 1 and $num_src_lines";
-    my $msg2 = " for current data file; got [$line_to_delete]";
+    my $msg1 = "DIE Got bad line number to delete, must be between 1";
+    my $msg2 = " and $num_src_lines for current data file: [$line_to_delete]";
     die "$msg1 $msg2"
         if ( $line_to_delete < 1 or $line_to_delete > $num_src_lines);
 
+    my $newfile = "todonew.txt";
     open my $fnew, '>', $newfile or die "Cannot open new file: [$!]";
 
     my $line_counter = 0;
-    open $fsrc, '<', $todofile or die "Cannot open new file: [$!]";
+    open $fsrc, '<', $todofile or die "Cannot open input file: [$!]";
     while (<$fsrc>) {
-        chomp;
         $line_counter++;
-        print {$fnew} $_, "\n" if ($line_counter != $line_to_delete);
+        print {$fnew} $_  if ($line_counter != $line_to_delete);
     }
     close $fsrc;
     close $fnew;
