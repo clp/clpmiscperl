@@ -1,0 +1,24 @@
+#!/usr/bin/perl
+
+#
+# This is a buggy program.  It has several syntax errors.  Correct
+# these errors so that it runs properly without any errors or
+# warnings.
+#
+# It should read the file named on the command line, strip out any
+# comments (defined as a substring starting with '#' and continuing to
+# the end of the line), whitespace at the beginning or end of the
+# line, or blank lines (including lines that contain only spaces), and
+# print the results.
+#
+use warnings;
+use strict
+
+my $file = shift @ARGV;
+open FILE, $file or die 'Can't read $file: $!\n';
+while <FLIE>
+{
+    s/#.*//; s/^\s+|\s+$/g; next if /^$/;
+    print "$_\n";
+}
+
